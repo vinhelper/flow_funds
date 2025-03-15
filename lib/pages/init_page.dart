@@ -1,3 +1,4 @@
+import 'package:flow_funds/pages/login_page.dart';
 import 'package:flow_funds/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
@@ -54,30 +55,26 @@ class InitPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromRGBO(
-                                  12,
-                                  192,
-                                  223,
-                                  1,
-                                ),
+                                backgroundColor: Color(0xFF48C9B3),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 16),
                               ),
-                              onPressed:
-                                  () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder:
-                                          (BuildContext context) =>
-                                              (RegisterPage()),
-                                    ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (BuildContext context) =>
+                                            (RegisterPage()),
                                   ),
-                              child: const Text(
+                                );
+                              },
+                              child: Text(
                                 "GET STARTED",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(0, 66, 73, 1),
+                                  color: Color(0xFF2C3E50),
                                 ),
                               ),
                             ),
@@ -99,21 +96,25 @@ class InitPage extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey[100],
+                                backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 16),
                               ),
                               onPressed: () {
-                                // Button 1 action
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (BuildContext context) => (LoginPage()),
+                                  ),
+                                );
                               },
-                              child: const Text(
+                              child: Text(
                                 "I ALREADY HAVE AN ACCOUNT",
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(0, 151, 167, 1),
                                 ),
                               ),
                             ),
