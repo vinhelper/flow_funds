@@ -1,5 +1,6 @@
 import 'package:flow_funds/pages/init_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
           // tertiary: Color.fromRGBO(245, 245, 220, 1),
           // tertiary: Color(0xFFF5F5DC),
           // textColor with bg primary: Color(0xFF2C3E50)
+          // textColor heading: Color(0xFF292828)
         ),
+        fontFamily: GoogleFonts.openSans().fontFamily,
       ),
       home: InitPage(),
     );
