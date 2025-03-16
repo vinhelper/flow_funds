@@ -1,4 +1,6 @@
 import 'package:flow_funds/pages/register_page.dart';
+import 'package:flow_funds/shared/on_boarding_button.dart';
+import 'package:flow_funds/shared/on_boarding_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -7,7 +9,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(169, 204, 227, 1),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -16,98 +17,76 @@ class LoginPage extends StatelessWidget {
             children: [
               SizedBox(height: MediaQuery.of(context).size.height / 12),
 
-              Image.asset("assets/images/flow_funds_logo_bg.png"),
+              Image.asset("assets/images/flow_funds_logo_bg2.png"),
 
               Text(
-                "Sign In to FlowFunds",
+                "Sign in to FlowFunds",
                 style: TextStyle(
-                  color: Color(0xFF022A31),
-                  fontSize: 30,
+                  color: Color(0xFF292828),
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
               SizedBox(height: 20),
 
-              TextField(
-                decoration: InputDecoration(
-                  label: Text("Email"),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14),
+              OnBoardingTextField(
+                inputLabel: "Email",
+                inputObscureText: false,
+                inputIcons: Icon(
+                  Icons.person_outline,
+                  color: Color(0xFF2C3E50),
                 ),
               ),
 
               SizedBox(height: 10),
 
-              TextField(
-                decoration: InputDecoration(
-                  label: Text("Password"),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 14),
+              OnBoardingTextField(
+                inputLabel: "Password",
+                inputObscureText: true,
+                inputIcons: Icon(
+                  Icons.vpn_key_outlined,
+                  color: Color(0xFF2C3E50),
                 ),
-                obscureText: true,
               ),
 
               SizedBox(height: 14),
 
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF48C9B3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        "SIGN IN",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(0, 66, 73, 1),
-                        ),
-                      ),
-                    ),
+              OnBoardingButton(
+                buttonColor: Color(0xFF48C9B3),
+                buttonText: Text(
+                  "SIGN IN",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2C3E50),
                   ),
-                ],
+                ),
+                buttonPressed: () {},
               ),
 
               SizedBox(height: 12),
 
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFF5F5DC),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                  Text(
+                    "Don't have an account? ",
+                    style: TextStyle(color: Color(0xFF2C3E50)),
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => (RegisterPage()),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "REGISTER",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(0, 151, 167, 1),
-                        ),
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 2),
                     ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                      );
+                    },
+                    child: Text("Register here"),
                   ),
                 ],
               ),

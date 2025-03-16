@@ -1,5 +1,6 @@
 import 'package:flow_funds/pages/login_page.dart';
 import 'package:flow_funds/pages/register_page.dart';
+import 'package:flow_funds/shared/on_boarding_button.dart';
 import 'package:flutter/material.dart';
 
 class InitPage extends StatelessWidget {
@@ -8,14 +9,13 @@ class InitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(169, 204, 227, 1),
       body: Column(
         children: [
           Expanded(flex: 1, child: SizedBox()),
           //display logo
           Expanded(
             flex: 4,
-            child: Image.asset("assets/images/flow_funds_logo_bg.png"),
+            child: Image.asset("assets/images/flow_funds_logo_bg2.png"),
           ),
 
           Expanded(
@@ -50,36 +50,23 @@ class InitPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF48C9B3),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (BuildContext context) =>
-                                            (RegisterPage()),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "GET STARTED",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF2C3E50),
-                                ),
-                              ),
-                            ),
+                      child: OnBoardingButton(
+                        buttonColor: Color(0xFF48C9B3),
+                        buttonText: Text(
+                          "GET STARTED",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2C3E50),
                           ),
-                        ],
+                        ),
+                        buttonPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder:
+                                  (BuildContext context) => (RegisterPage()),
+                            ),
+                          );
+                        },
                       ),
                     ),
 
@@ -91,35 +78,22 @@ class InitPage extends StatelessWidget {
                         right: 30,
                         bottom: 40,
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (BuildContext context) => (LoginPage()),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "I ALREADY HAVE AN ACCOUNT",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                      child: OnBoardingButton(
+                        buttonText: Text(
+                          "I ALREADY HAVE AN ACCOUNT",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
+                        buttonColor: Colors.white,
+                        buttonPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],
