@@ -4,12 +4,14 @@ class OnBoardingTextField extends StatelessWidget {
   final bool inputObscureText;
   final String inputLabel;
   final Icon inputIcons;
+  final TextEditingController inputController;
 
   const OnBoardingTextField({
     super.key,
     required this.inputLabel,
     required this.inputObscureText,
     required this.inputIcons,
+    required this.inputController,
   });
 
   @override
@@ -32,6 +34,7 @@ class OnBoardingTextField extends StatelessWidget {
         floatingLabelStyle: TextStyle(color: Color(0xFF2C3E50), fontSize: 16),
       ),
       obscureText: inputObscureText,
+      controller: inputController,
     );
   }
 }

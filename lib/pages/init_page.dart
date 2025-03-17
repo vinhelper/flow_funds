@@ -1,10 +1,10 @@
-import 'package:flow_funds/pages/login_page.dart';
-import 'package:flow_funds/pages/register_page.dart';
 import 'package:flow_funds/shared/on_boarding_button.dart';
 import 'package:flutter/material.dart';
 
 class InitPage extends StatelessWidget {
-  const InitPage({super.key});
+  final void Function()? togglePage;
+
+  const InitPage({super.key, required this.togglePage});
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +59,7 @@ class InitPage extends StatelessWidget {
                             color: Color(0xFF2C3E50),
                           ),
                         ),
-                        buttonPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (BuildContext context) => (RegisterPage()),
-                            ),
-                          );
-                        },
+                        buttonPressed: togglePage,
                       ),
                     ),
 
@@ -87,13 +80,7 @@ class InitPage extends StatelessWidget {
                           ),
                         ),
                         buttonColor: Colors.white,
-                        buttonPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => LoginPage(),
-                            ),
-                          );
-                        },
+                        buttonPressed: togglePage,
                       ),
                     ),
                   ],
