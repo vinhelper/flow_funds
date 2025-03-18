@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'flow-funds.firebasestorage.app',
     measurementId: 'G-5D31B2KEJ4',
   );
+
 }
