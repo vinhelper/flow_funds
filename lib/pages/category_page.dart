@@ -117,7 +117,15 @@ class _CategoryPageState extends State<CategoryPage>
             );
           } else {
             return Center(
-              child: Text("Click + to add category for your expenses"),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "Click + to add recent category for your expenses",
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
             );
           }
         },
@@ -148,7 +156,7 @@ void showAddCategoryDialog(
             child: OnBoardingTextField(
               inputLabel: "Category",
               inputObscureText: false,
-              inputIcons: Icon(Icons.add),
+              // inputIcons: Icon(Icons.add),
               inputController: categoryController,
             ),
           ),
