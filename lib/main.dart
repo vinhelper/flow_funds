@@ -1,5 +1,6 @@
 import 'package:flow_funds/pages/auth_page.dart';
 import 'package:flow_funds/providers/category_provider.dart';
+import 'package:flow_funds/providers/expense_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => ExpenseProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

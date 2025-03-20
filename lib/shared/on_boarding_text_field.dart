@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class OnBoardingTextField extends StatelessWidget {
   final bool inputObscureText;
   final String inputLabel;
-  final Icon inputIcons;
+  final Icon? inputIcons;
   final TextEditingController inputController;
 
   const OnBoardingTextField({
     super.key,
     required this.inputLabel,
     required this.inputObscureText,
-    required this.inputIcons,
+    this.inputIcons,
     required this.inputController,
   });
 

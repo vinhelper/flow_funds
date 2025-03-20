@@ -41,6 +41,7 @@ class _CategoryPageState extends State<CategoryPage>
         title: Text("Manage Categories", style: TextStyle(fontSize: 20)),
         centerTitle: true,
         backgroundColor: Color(0xFF48C9B3),
+        elevation: 0,
       ),
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {
@@ -117,7 +118,15 @@ class _CategoryPageState extends State<CategoryPage>
             );
           } else {
             return Center(
-              child: Text("Click + to add category for your expenses"),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "Click + to add recent category for your expenses",
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
             );
           }
         },
@@ -148,7 +157,7 @@ void showAddCategoryDialog(
             child: OnBoardingTextField(
               inputLabel: "Category",
               inputObscureText: false,
-              inputIcons: Icon(Icons.add),
+              // inputIcons: Icon(Icons.add),
               inputController: categoryController,
             ),
           ),
