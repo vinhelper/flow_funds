@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flow_funds/components/home_page_filter.dart';
+import 'package:flow_funds/models/expense_model.dart';
 import 'package:flow_funds/pages/add_expenses_page.dart';
 import 'package:flow_funds/pages/category_page.dart';
 import 'package:flow_funds/providers/expense_provider.dart';
 import 'package:flow_funds/shared/loading_icon_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,7 +43,12 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(elevation: 0),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("FLOWFUNDS", style: TextStyle(fontSize: 20)),
+        centerTitle: true,
+        backgroundColor: Color(0xFF48C9B3),
+      ),
       drawer: Drawer(
         backgroundColor: Color(0xFF48C9B3),
         child: Column(
@@ -152,7 +160,79 @@ class _HomePageState extends State<HomePage>
           }
 
           if (provider.expenses.isNotEmpty) {
-            return Text("Not Empty");
+            return Consumer<ExpenseProvider>(
+              builder: (context, provider, child) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    top: 10.0,
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: Column(
+                    children: [
+                      HomePageFilter(),
+
+                      SizedBox(height: 10),
+
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: provider.expenses.length,
+                          itemBuilder: (context, index) {
+                            final expense = provider.expenses[index];
+                            return ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              tileColor: Color.fromRGBO(72, 201, 179, 0.2),
+                              contentPadding: EdgeInsets.only(
+                                left: 24,
+                                right: 24,
+                                top: 4,
+                                bottom: 8,
+                              ),
+                              title: Text(
+                                expense.title,
+                                softWrap: true,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  height: 2,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${expense.categoryId} - Php ${expense.amount}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+
+                                  Text(
+                                    DateFormat(
+                                      'MM/dd/yyyy',
+                                    ).format(expense.date),
+                                    style: TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ],
+                              ),
+                              isThreeLine: true,
+                              onTap: () {
+                                showEntryDetailsModal(context, expense);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
           } else {
             return Center(
               child: Padding(
@@ -178,4 +258,42 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
+}
+
+void showEntryDetailsModal(BuildContext context, Expense expense) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Expense Details',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text('Title: ${expense.title}'),
+              Text('Category: ${expense.categoryId}'),
+              Text('Amount: Php ${expense.amount}'),
+              Text('Date: ${DateFormat('MM/dd/yyyy').format(expense.date)}'),
+              Text('Notes: ${expense.note ?? "N/A"}'),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

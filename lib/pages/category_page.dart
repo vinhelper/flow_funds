@@ -41,6 +41,7 @@ class _CategoryPageState extends State<CategoryPage>
         title: Text("Manage Categories", style: TextStyle(fontSize: 20)),
         centerTitle: true,
         backgroundColor: Color(0xFF48C9B3),
+        elevation: 0,
       ),
       body: Consumer<CategoryProvider>(
         builder: (context, provider, child) {

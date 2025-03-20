@@ -50,11 +50,13 @@ class ExpenseProvider with ChangeNotifier {
 
   void addExpense(Expense item) {
     _expenses.add(item);
+    _saveExpenses();
     notifyListeners();
   }
 
   void deleteExpense(String id) {
     _expenses.removeWhere((expense) => expense.id == id);
+    _saveExpenses();
     notifyListeners();
   }
 }

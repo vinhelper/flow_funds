@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Expense {
   final String id;
   final String title;
@@ -22,7 +24,7 @@ class Expense {
       note: json['note'],
       amount: json['amount'],
       categoryId: json['categoryId'],
-      date: json['date'],
+      date: (json['date'] as Timestamp).toDate(),
     );
   }
 
