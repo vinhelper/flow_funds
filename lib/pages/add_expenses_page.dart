@@ -124,6 +124,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                   "Select date",
                   style: TextStyle(color: Color.fromRGBO(54, 69, 79, 0.8)),
                 ),
+                suffixIcon: Icon(Icons.calendar_today),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(width: 2, color: Colors.grey.shade500),
@@ -135,10 +136,6 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 16,
-                ),
-                floatingLabelStyle: TextStyle(
-                  color: Color(0xFF2C3E50),
-                  fontSize: 16,
                 ),
               ),
               readOnly: true,

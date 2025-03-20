@@ -7,13 +7,16 @@ class ExpenseProvider with ChangeNotifier {
   List<Expense> _expenses = [];
   List<Expense> get expenses => _expenses;
   bool _isLoading = false;
+  String _selectedFilter = "By Month";
 
   bool get isLoading => _isLoading;
+  String get selectedFilter => _selectedFilter;
 
   Future<void> loadExpenses() async {
     String? uid = localStorage.getItem("uid");
     try {
       _isLoading = true;
+      _selectedFilter = "By Month";
       DocumentSnapshot docs =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
@@ -40,6 +43,11 @@ class ExpenseProvider with ChangeNotifier {
     }
   }
 
+  void changeFilter(String filter) {
+    _selectedFilter = filter;
+    notifyListeners();
+  }
+
   void _saveExpenses() async {
     String? uid = localStorage.getItem("uid");
     List jsonList = _expenses.map((expense) => expense.toJson()).toList();
@@ -50,6 +58,7 @@ class ExpenseProvider with ChangeNotifier {
 
   void addExpense(Expense item) {
     _expenses.add(item);
+    _expenses.sort((item1, item2) => item2.date.compareTo(item1.date));
     _saveExpenses();
     notifyListeners();
   }
