@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:collection/collection.dart';
 import 'package:flow_funds/components/home_page_filter.dart';
-import 'package:flow_funds/models/expense_model.dart';
+import 'package:flow_funds/functions/home_page_functions.dart';
 import 'package:flow_funds/pages/add_expenses_page.dart';
 import 'package:flow_funds/pages/category_page.dart';
 import 'package:flow_funds/providers/expense_provider.dart';
@@ -20,10 +20,6 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController iconController;
   bool _isDialogShowing = false;
-
-  void signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
 
   @override
   void dispose() {
@@ -162,6 +158,37 @@ class _HomePageState extends State<HomePage>
           if (provider.expenses.isNotEmpty) {
             return Consumer<ExpenseProvider>(
               builder: (context, provider, child) {
+                var groupEntriesByCategory = groupBy(provider.expenses, (
+                  expense,
+                ) {
+                  switch (provider.selectedFilter) {
+                    case "By Category":
+                      return expense.categoryId;
+                    case "By Month":
+                      return DateFormat('MMMM yyyy').format(expense.date);
+                    default:
+                      return "all";
+                  }
+                });
+
+                if (provider.selectedFilter.contains("highest")) {
+                  groupEntriesByCategory = groupEntriesByCategory.map((
+                    key,
+                    value,
+                  ) {
+                    value.sort((a, b) => b.amount.compareTo(a.amount));
+                    return MapEntry(key, value);
+                  });
+                } else if (provider.selectedFilter.contains("lowest")) {
+                  groupEntriesByCategory = groupEntriesByCategory.map((
+                    key,
+                    value,
+                  ) {
+                    value.sort((a, b) => a.amount.compareTo(b.amount));
+                    return MapEntry(key, value);
+                  });
+                }
+
                 return Padding(
                   padding: const EdgeInsets.only(
                     top: 10.0,
@@ -176,54 +203,136 @@ class _HomePageState extends State<HomePage>
 
                       Expanded(
                         child: ListView.builder(
-                          itemCount: provider.expenses.length,
+                          itemCount: groupEntriesByCategory.length,
                           itemBuilder: (context, index) {
-                            final expense = provider.expenses[index];
-                            return ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              tileColor: Color.fromRGBO(72, 201, 179, 0.2),
-                              contentPadding: EdgeInsets.only(
-                                left: 24,
-                                right: 24,
-                                top: 4,
-                                bottom: 8,
-                              ),
-                              title: Text(
-                                expense.title,
-                                softWrap: true,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  height: 2,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${expense.categoryId} - Php ${expense.amount}",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
+                            final categoryKey =
+                                groupEntriesByCategory.entries
+                                    .elementAt(index)
+                                    .key;
+                            final categoryValue =
+                                groupEntriesByCategory.entries
+                                    .elementAt(index)
+                                    .value;
 
-                                  Text(
-                                    DateFormat(
-                                      'MM/dd/yyyy',
-                                    ).format(expense.date),
-                                    style: TextStyle(fontSize: 14),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
-                              ),
-                              isThreeLine: true,
-                              onTap: () {
-                                showEntryDetailsModal(context, expense);
-                              },
+                            final summation = categoryValue.fold(
+                              0.0,
+                              (previousValue, category) =>
+                                  previousValue + category.amount,
+                            );
+
+                            return Column(
+                              children: [
+                                //title
+                                // Text(categoryKey),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 20,
+                                        top: 10,
+                                        bottom: 20,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          getHeaderTile(
+                                            provider.selectedFilter,
+                                            categoryKey,
+                                          ),
+                                          if (!(provider.selectedFilter
+                                                  .contains("highest") ||
+                                              provider.selectedFilter.contains(
+                                                "lowest",
+                                              )))
+                                            Text(
+                                              "Total: Php ${summation.toString()}",
+                                              style: TextStyle(height: 1.5),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    Expanded(
+                                      child: Divider(thickness: 2, height: 2),
+                                    ),
+
+                                    // Text("Total: Php ${summation.toString()}"),
+                                  ],
+                                ),
+
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: categoryValue.length,
+                                  itemBuilder: (context, index) {
+                                    final expense = categoryValue[index];
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          tileColor: Color.fromRGBO(
+                                            72,
+                                            201,
+                                            179,
+                                            0.2,
+                                          ),
+                                          contentPadding: EdgeInsets.only(
+                                            left: 24,
+                                            right: 24,
+                                            top: 4,
+                                            bottom: 8,
+                                          ),
+                                          title: Text(
+                                            expense.title,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              height: 2,
+                                            ),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${expense.categoryId} - Php ${expense.amount}",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                textAlign: TextAlign.start,
+                                              ),
+
+                                              Text(
+                                                DateFormat(
+                                                  'MM/dd/yyyy',
+                                                ).format(expense.date),
+                                                style: TextStyle(fontSize: 14),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            ],
+                                          ),
+                                          isThreeLine: true,
+                                          onTap: () {
+                                            showEntryDetailsModal(
+                                              context,
+                                              expense,
+                                            );
+                                          },
+                                        ),
+
+                                        SizedBox(height: 10),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -258,42 +367,4 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
-}
-
-void showEntryDetailsModal(BuildContext context, Expense expense) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                'Expense Details',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Text('Title: ${expense.title}'),
-              Text('Category: ${expense.categoryId}'),
-              Text('Amount: Php ${expense.amount}'),
-              Text('Date: ${DateFormat('MM/dd/yyyy').format(expense.date)}'),
-              Text('Notes: ${expense.note ?? "N/A"}'),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Close'),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }

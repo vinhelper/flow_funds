@@ -1,4 +1,6 @@
+import 'package:flow_funds/providers/expense_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePageFilter extends StatefulWidget {
   const HomePageFilter({super.key});
@@ -8,8 +10,13 @@ class HomePageFilter extends StatefulWidget {
 }
 
 class _HomePageFilterState extends State<HomePageFilter> {
-  List<String> filters = ["Month", "Year", "Category"];
-  String? _selectedFilter;
+  List<String> filters = [
+    "By Month",
+    "By Category",
+    "Sort from highest amount",
+    "Sort from lowest amount",
+  ];
+  String? _selectedFilter = "By Month";
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,8 @@ class _HomePageFilterState extends State<HomePageFilter> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButton(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+        icon: Icon(Icons.tune),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
         isExpanded: true,
         underline: Container(),
         value: _selectedFilter,
@@ -34,6 +42,7 @@ class _HomePageFilterState extends State<HomePageFilter> {
         onChanged: (newValue) {
           setState(() {
             _selectedFilter = newValue;
+            context.read<ExpenseProvider>().changeFilter(newValue!);
           });
         },
       ),
